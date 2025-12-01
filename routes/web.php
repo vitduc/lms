@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TwoFactorController;
+use App\Http\Controllers\ProfileController;
 
 // Home Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -20,6 +21,16 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'storeRegister'])->name('register.store')->middleware('guest');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+// Authenticated user routes
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::patch('/profile/two-factor', [ProfileController::class, 'toggleTwoFactor'])->name('profile.two-factor');
+    Route::view('/my-courses', 'pages.my-courses')->name('my-courses');
+    Route::view('/dashboard', 'pages.dashboard')->name('dashboard');
+    Route::view('/settings', 'pages.settings')->name('settings');
+    Route::view('/teach', 'pages.teach')->name('teach');
+});
 
 // Two-Factor Authentication routes
 Route::get('/2fa', [TwoFactorController::class, 'show'])->name('2fa.show');

@@ -19,6 +19,10 @@ return new class extends Migration
             $table->index(['user_id']);
             $table->index(['expires_at']);
         });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('two_factor_enabled')->default(false)->after('remember_token');
+        });
     }
 
     public function down(): void

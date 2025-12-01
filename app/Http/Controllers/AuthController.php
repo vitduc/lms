@@ -46,6 +46,12 @@ class AuthController extends Controller
             ])->onlyInput('email');
         }
 
+        // If user disabled 2FA, log them in immediately
+        if (!$user->two_factor_enabled) {
+            Auth::login($user, $request->boolean('remember'));
+            return redirect()->intended('/')->with('success', 'Đăng nhập thành công!');
+        }
+
         // Generate OTP and send to user's email
         $otp = random_int(100000, 999999);
         $tokenHash = Hash::make((string) $otp);
