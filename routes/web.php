@@ -5,6 +5,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 
 // Home Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -30,6 +32,11 @@ Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'pages.dashboard')->name('dashboard');
     Route::view('/settings', 'pages.settings')->name('settings');
     Route::view('/teach', 'pages.teach')->name('teach');
+});
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', AdminDashboardController::class)->name('dashboard');
+    Route::resource('users', AdminUserController::class)->except(['create', 'store', 'destroy', 'show']);
 });
 
 // Two-Factor Authentication routes
