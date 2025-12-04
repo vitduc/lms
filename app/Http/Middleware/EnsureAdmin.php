@@ -17,8 +17,15 @@ class EnsureAdmin
     {
         $user = $request->user();
 
-        if (!$user || !$user->hasRole('admin')) {
-            abort(Response::HTTP_FORBIDDEN, 'Bạn không có quyền truy cập khu vực quản trị.');
+        if (!$user) {
+            return redirect()->route('admin.login');
+        }
+
+        if (!$user->hasRole('admin')) {
+            if ($request->expectsJson()) {
+                abort(Response::HTTP_FORBIDDEN, 'Bạn không có quyền truy cập khu vực quản trị.');
+            }
+            return redirect()->route('admin.login')->withErrors(['email' => 'Bạn không có quyền truy cập khu vực quản trị.']);
         }
 
         return $next($request);

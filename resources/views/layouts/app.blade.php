@@ -89,6 +89,22 @@
             if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
                 dropdown.classList.add('hidden');
             }
+
+            // Close notifications dropdown when clicking outside
+            const notificationsDropdown = document.getElementById('notifications-dropdown');
+            const notificationsBtn = document.getElementById('notifications-btn');
+            const notificationsContainer = document.getElementById('notifications-container');
+            if (notificationsDropdown && notificationsContainer && !notificationsContainer.contains(e.target)) {
+                notificationsDropdown.classList.add('hidden');
+            }
+        });
+
+        // Notifications Dropdown Toggle
+        document.getElementById('notifications-btn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const dropdown = document.getElementById('notifications-dropdown');
+            dropdown.classList.toggle('hidden');
         });
     </script>
     @stack('scripts')
