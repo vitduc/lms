@@ -10,7 +10,7 @@
                     <p class="text-gray-500 mt-1">Tất cả thông báo của bạn</p>
                 </div>
                 @if(auth()->user()->unreadNotifications->count() > 0)
-                    <form action="{{ route('notifications.mark-all-read') }}" method="POST">
+                    <form action="{{ localized_route('notifications.mark-all-read') }}" method="POST">
                         @csrf
                         <button type="submit" class="btn-primary text-white px-4 py-2 rounded-lg font-semibold text-sm">
                             <i class="fas fa-check-double mr-2"></i>Đánh dấu tất cả đã đọc
@@ -60,7 +60,7 @@
                                             </div>
                                         </div>
                                         @if(!$notification->read_at)
-                                            <form action="{{ route('notifications.mark-read', $notification->id) }}" method="POST" class="flex-shrink-0">
+                                            <form action="{{ localized_route('notifications.mark-read', $notification->id) }}" method="POST" class="flex-shrink-0">
                                                 @csrf
                                                 <button type="submit" class="text-purple-600 hover:text-purple-700 text-sm">
                                                     <i class="fas fa-check"></i> Đánh dấu đã đọc
@@ -91,7 +91,7 @@
                     </div>
                     <h3 class="text-xl font-semibold text-gray-700 mb-2">Chưa có thông báo</h3>
                     <p class="text-gray-500 mb-6">Các thông báo mới về khóa học, bài học và hoạt động sẽ xuất hiện ở đây</p>
-                    <a href="{{ route('home') }}" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center">
+                    <a href="{{ localized_route('home') }}" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center">
                         <i class="fas fa-arrow-left mr-2"></i> Về trang chủ
                     </a>
                 </div>

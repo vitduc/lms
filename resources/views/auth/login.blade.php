@@ -12,7 +12,7 @@
 
         <!-- Login Form -->
         <div class="bg-white rounded-lg shadow-lg p-8">
-            <form method="POST" action="{{ route('login.store') }}" class="space-y-6">
+            <form method="POST" action="{{ localized_route('login.store') }}" class="space-y-6">
                 @csrf
 
                 <!-- Email -->
@@ -85,7 +85,7 @@
             <div class="mt-6 pt-6 border-t border-gray-200">
                 <p class="text-center text-gray-600 text-sm">
                     Chưa có tài khoản?
-                    <a href="{{ route('register') }}" class="font-semibold text-purple-600 hover:text-purple-700">
+                    <a href="{{ localized_route('register') }}" class="font-semibold text-purple-600 hover:text-purple-700">
                         Đăng ký ngay
                     </a>
                 </p>

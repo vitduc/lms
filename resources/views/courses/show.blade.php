@@ -26,11 +26,11 @@
                     </div>
                     <div class="p-6 space-y-6">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-sm font-semibold">{{ $course->category->name }}</span>
-                            <span class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold">{{ $course->level->name }}</span>
+                            <span class="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-sm font-semibold">{{ $course->category->translated_name ?? $course->category->name }}</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold">{{ $course->level->translated_name ?? $course->level->name }}</span>
                         </div>
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                            <h1 class="text-3xl font-bold text-gray-900">{{ $course->title }}</h1>
+                            <h1 class="text-3xl font-bold text-gray-900">{{ $course->translated_title ?? $course->title }}</h1>
                             @if($reviewsCount > 0)
                                 <div class="flex items-center gap-3 bg-yellow-50 border border-yellow-200 rounded-full px-4 py-2">
                                     <div class="flex items-center text-yellow-400">
@@ -44,18 +44,18 @@
                                     </div>
                                     <div class="text-sm text-gray-700">
                                         <span class="font-semibold">{{ number_format($averageRating, 1) }}/5.0</span>
-                                        <span class="text-gray-500">• {{ $reviewsCount }} đánh giá</span>
+                                        <span class="text-gray-500">• {{ $reviewsCount }} {{ __('reviews') }}</span>
                                     </div>
                                 </div>
                             @else
-                                <div class="text-sm text-gray-500 italic">Chưa có đánh giá nào</div>
+                                <div class="text-sm text-gray-500 italic">{{ __('No reviews yet') }}</div>
                             @endif
                         </div>
                         <div class="prose max-w-none">
-                            {!! $course->content ?? $course->description !!}
+                            {!! $course->translated_content ?? $course->translated_description ?? $course->content ?? $course->description !!}
                         </div>
                         <div class="border-t pt-6">
-                            <h2 class="text-xl font-bold text-gray-900 mb-4">Về giảng viên</h2>
+                            <h2 class="text-xl font-bold text-gray-900 mb-4">{{ __('About the instructor') }}</h2>
                             <div class="flex items-center gap-4">
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($course->instructor->name) }}&background=667eea&color=fff" alt="{{ $course->instructor->name }}" class="w-16 h-16 rounded-full">
                                 <div>
@@ -66,7 +66,7 @@
                         </div>
 
                         <div class="border-t pt-6">
-                            <h2 class="text-xl font-bold text-gray-900 mb-4">Đánh giá từ học viên</h2>
+                            <h2 class="text-xl font-bold text-gray-900 mb-4">{{ __('Reviews from students') }}</h2>
                             @if($reviewsCount > 0)
                                 <div class="space-y-4">
                                     @foreach($course->reviews->take(5) as $review)
@@ -95,18 +95,18 @@
                                             <p class="text-sm text-gray-700">{{ $review->content }}</p>
                                             @if($review->is_verified_purchase)
                                                 <p class="mt-2 text-xs text-emerald-600 flex items-center gap-1">
-                                                    <i class="fas fa-badge-check"></i> Đã mua khóa học này
+                                                    <i class="fas fa-badge-check"></i> {{ __('Purchased this course') }}
                                                 </p>
                                             @endif
                                         </div>
                                     @endforeach
                                     @if($reviewsCount > 5)
-                                        <p class="text-sm text-gray-500">... và {{ $reviewsCount - 5 }} đánh giá khác</p>
+                                        <p class="text-sm text-gray-500">... {{ __('and') }} {{ $reviewsCount - 5 }} {{ __('more reviews') }}</p>
                                     @endif
                                 </div>
                             @else
                                 <div class="bg-gray-50 border border-dashed border-gray-200 rounded-xl p-6 text-center text-gray-500 text-sm">
-                                    Chưa có đánh giá nào cho khóa học này. Hãy là người đầu tiên chia sẻ cảm nhận sau khi hoàn thành khóa học.
+                                    {{ __('Be the first to share your thoughts after completing this course.') }}
                                 </div>
                             @endif
                         </div>
@@ -119,34 +119,34 @@
                 <div class="bg-white rounded-2xl shadow-md p-6 sticky top-24">
                     <div class="text-center mb-6">
                         @if($course->isFree())
-                            <div class="text-4xl font-bold text-emerald-600 mb-2">Miễn phí</div>
+                            <div class="text-4xl font-bold text-emerald-600 mb-2">{{ __('Free') }}</div>
                         @else
                             <div class="text-4xl font-bold text-purple-600 mb-2">₫{{ number_format($course->price, 0, ',', '.') }}</div>
                         @endif
-                        <p class="text-sm text-gray-500">{{ $course->enrollments->count() }} học viên đã đăng ký</p>
+                        <p class="text-sm text-gray-500">{{ $course->enrollments->count() }} {{ __('students enrolled') }}</p>
                     </div>
 
                     @if($isEnrolled)
                         <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-4">
                             <div class="flex items-center gap-2 text-emerald-700">
                                 <i class="fas fa-check-circle"></i>
-                                <span class="font-semibold">Bạn đã đăng ký khóa học này</span>
+                                <span class="font-semibold">{{ __('You have enrolled in this course') }}</span>
                             </div>
                         </div>
-                        <a href="{{ route('my-courses') }}" class="btn-primary text-white w-full text-center py-3 rounded-lg font-semibold block">
-                            <i class="fas fa-book-open mr-2"></i>Vào học ngay
+                        <a href="{{ localized_route('my-courses') }}" class="btn-primary text-white w-full text-center py-3 rounded-lg font-semibold block">
+                            <i class="fas fa-book-open mr-2"></i>{{ __('Start learning now') }}
                         </a>
                     @else
                         @if($course->isFree())
-                            <form action="{{ route('courses.enroll', $course->id) }}" method="POST">
+                            <form action="{{ localized_route('courses.enroll', $course->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn-primary text-white w-full py-3 rounded-lg font-semibold">
-                                    <i class="fas fa-user-plus mr-2"></i>Đăng ký miễn phí
+                                    <i class="fas fa-user-plus mr-2"></i>{{ __('Enroll for free') }}
                                 </button>
                             </form>
                         @else
-                            <a href="{{ route('courses.payment', $course->id) }}" class="btn-primary text-white w-full text-center py-3 rounded-lg font-semibold block">
-                                <i class="fas fa-credit-card mr-2"></i>Thanh toán và đăng ký
+                            <a href="{{ localized_route('courses.payment', $course->id) }}" class="btn-primary text-white w-full text-center py-3 rounded-lg font-semibold block">
+                                <i class="fas fa-credit-card mr-2"></i>{{ __('Pay and enroll') }}
                             </a>
                         @endif
                     @endif
@@ -154,15 +154,15 @@
                     <div class="mt-6 space-y-3 text-sm">
                         <div class="flex items-center gap-2 text-gray-600">
                             <i class="fas fa-clock text-purple-600"></i>
-                            <span>Học mọi lúc mọi nơi</span>
+                            <span>{{ __('Learn anytime, anywhere') }}</span>
                         </div>
                         <div class="flex items-center gap-2 text-gray-600">
                             <i class="fas fa-certificate text-purple-600"></i>
-                            <span>Chứng chỉ hoàn thành</span>
+                            <span>{{ __('Completion certificate') }}</span>
                         </div>
                         <div class="flex items-center gap-2 text-gray-600">
                             <i class="fas fa-headset text-purple-600"></i>
-                            <span>Hỗ trợ 24/7</span>
+                            <span>{{ __('24/7 support') }}</span>
                         </div>
                     </div>
                 </div>

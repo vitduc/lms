@@ -14,7 +14,7 @@
                 <div class="mb-4 text-green-600">{{ session('success') }}</div>
             @endif
 
-            <form method="POST" action="{{ route('2fa.verify') }}" class="space-y-4">
+            <form method="POST" action="{{ localized_route('2fa.verify') }}" class="space-y-4">
                 @csrf
                 <div>
                     <label for="otp" class="block text-sm font-medium text-gray-700 mb-2">Mã OTP</label>
@@ -28,7 +28,7 @@
             </form>
 
             <div class="mt-4 text-center text-sm">
-                <form method="POST" action="{{ route('2fa.resend') }}">
+                <form method="POST" action="{{ localized_route('2fa.resend') }}">
                     @csrf
                     <button type="submit" class="text-purple-600 hover:underline">Gửi lại mã OTP</button>
                 </form>

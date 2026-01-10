@@ -36,5 +36,13 @@ class DatabaseSeeder extends Seeder
             'email' => 'student@example.com',
         ]);
         $student->roles()->attach(3); // Student role
+
+        // Seed categories, levels, courses and reviews
+        $this->call([
+            CategorySeeder::class,
+            LevelSeeder::class,
+            CourseSeeder::class,
+            ReviewSeeder::class,
+        ]);
     }
 }

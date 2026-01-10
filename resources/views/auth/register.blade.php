@@ -12,7 +12,7 @@
 
         <!-- Register Form -->
         <div class="bg-white rounded-lg shadow-lg p-8">
-            <form method="POST" action="{{ route('register.store') }}" class="space-y-4">
+            <form method="POST" action="{{ localized_route('register.store') }}" class="space-y-4">
                 @csrf
 
                 <!-- Full Name -->
@@ -122,7 +122,7 @@
             <div class="mt-6 pt-6 border-t border-gray-200">
                 <p class="text-center text-gray-600 text-sm">
                     Đã có tài khoản?
-                    <a href="{{ route('login') }}" class="font-semibold text-purple-600 hover:text-purple-700">
+                    <a href="{{ localized_route('login') }}" class="font-semibold text-purple-600 hover:text-purple-700">
                         Đăng nhập ngay
                     </a>
                 </p>

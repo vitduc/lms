@@ -12,7 +12,6 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Instructor
-            $table->foreignId('category_id')->constrained('categories')->onDelete('restrict');
             $table->foreignId('level_id')->constrained('levels')->onDelete('restrict');
             $table->string('title');
             $table->string('slug')->unique();
@@ -26,6 +25,13 @@ return new class extends Migration
 
             $table->index('status');
             $table->index('user_id');
+        });
+
+        // Category course table
+        Schema::create('category_course', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
         });
 
         // Sections table

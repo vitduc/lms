@@ -10,15 +10,71 @@
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="/" class="text-gray-700 hover:text-purple-600 transition">Home</a>
-                <a href="/courses" class="text-gray-700 hover:text-purple-600 transition">Courses</a>
-                <a href="/categories" class="text-gray-700 hover:text-purple-600 transition">Categories</a>
-                <a href="/instructors" class="text-gray-700 hover:text-purple-600 transition">Instructors</a>
-                <a href="/blog" class="text-gray-700 hover:text-purple-600 transition">Blog</a>
+                <a href="{{ localized_route('home') }}" class="text-gray-700 hover:text-purple-600 transition">{{ __('Home') }}</a>
+{{--                <a href="{{ localized_route('courses.index') }}" class="text-gray-700 hover:text-purple-600 transition">Courses</a>--}}
+
+                <!-- Categories Dropdown -->
+                <div class="relative" id="categories-container">
+                    <button id="categories-btn" class="flex items-center space-x-1 text-gray-700 hover:text-purple-600 transition focus:outline-none">
+                        <span>{{ __('Categories') }}</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="categories-dropdown" class="hidden absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-40">
+                        <div class="px-4 py-3 border-b border-gray-100">
+                            <p class="text-sm font-semibold text-gray-900">{{ __('Course categories') }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ __('Select a category to filter courses') }}</p>
+                        </div>
+                        <div class="py-2 max-h-80 overflow-y-auto">
+                            @php
+                                $navCategories = \App\Models\Category::orderBy('order')->get();
+                            @endphp
+                            @forelse($navCategories as $category)
+                                <a href="{{ localized_route('courses.index', ['slug' => $category->slug]) }}"
+                                   class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition">
+                                    @if($category->icon)
+                                        <i class="fas {{ $category->icon }} w-5 mr-2 text-purple-500"></i>
+                                    @else
+                                        <i class="fas fa-folder w-5 mr-2 text-purple-500"></i>
+                                    @endif
+                                    <span>{{ $category->translated_name ?? $category->name }}</span>
+                                </a>
+                            @empty
+                                <div class="px-4 py-3 text-xs text-gray-500">
+                                    {{ __('No categories yet.') }}
+                                </div>
+                            @endforelse
+                        </div>
+{{--                        <div class="px-4 py-2 border-t border-gray-100 text-center">--}}
+{{--                            <a href="{{ localized_route('courses.index') }}" class="text-xs text-purple-600 hover:text-purple-700 font-semibold">--}}
+{{--                                Xem tất cả khóa học--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
+                    </div>
+                </div>
+
+                <a href="{{ localized_route('instructors') }}" class="text-gray-700 hover:text-purple-600 transition">{{ __('Instructors') }}</a>
+                <a href="{{ localized_route('blog') }}" class="text-gray-700 hover:text-purple-600 transition">{{ __('Blog') }}</a>
             </div>
 
             <!-- Auth Section -->
             <div class="flex items-center space-x-4">
+                <!-- Language Switcher -->
+                <div class="relative">
+                    <button id="language-btn" class="flex items-center space-x-1 text-gray-700 hover:text-purple-600 transition focus:outline-none">
+                        <i class="fas fa-globe"></i>
+                        <span class="hidden sm:inline">{{ strtoupper(app()->getLocale()) }}</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="language-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                        <a href="{{ route('language.switch', 'en') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition {{ app()->getLocale() === 'en' ? 'bg-purple-50 text-purple-700' : '' }}">
+                            <i class="fas fa-flag mr-2"></i>{{ __('English') }}
+                        </a>
+                        <a href="{{ route('language.switch', 'vi') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition {{ app()->getLocale() === 'vi' ? 'bg-purple-50 text-purple-700' : '' }}">
+                            <i class="fas fa-flag mr-2"></i>{{ __('Vietnamese') }}
+                        </a>
+                    </div>
+                </div>
+
                 @if (auth()->check())
                     <!-- Notifications Dropdown -->
                     <div class="relative" id="notifications-container">
@@ -40,16 +96,16 @@
                         <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-96 overflow-y-auto">
                             <div class="p-4 border-b border-gray-200 flex items-center justify-between">
                                 <h3 class="font-semibold text-gray-900">
-                                    <i class="fas fa-bell mr-2 text-purple-600"></i>Thông báo
+                                    <i class="fas fa-bell mr-2 text-purple-600"></i>{{ __('Notifications') }}
                                     @if($unreadCount > 0)
-                                        <span class="ml-2 text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">{{ $unreadCount }} mới</span>
+                                        <span class="ml-2 text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">{{ $unreadCount }} {{ __('new') }}</span>
                                     @endif
                                 </h3>
                                 @if($unreadCount > 0)
                                     <form action="{{ route('notifications.mark-all-read') }}" method="POST" class="inline">
                                         @csrf
                                         <button type="submit" class="text-xs text-purple-600 hover:text-purple-700 font-semibold">
-                                            <i class="fas fa-check-double mr-1"></i>Đánh dấu tất cả
+                                            <i class="fas fa-check-double mr-1"></i>{{ __('Mark all as read') }}
                                         </button>
                                     </form>
                                 @endif
@@ -80,7 +136,7 @@
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                     <p class="text-sm font-semibold text-gray-900 truncate">
-                                                        {{ $notification->data['title'] ?? 'Thông báo mới' }}
+                                                        {{ $notification->data['title'] ?? __('New notification') }}
                                                     </p>
                                                     <p class="text-xs text-gray-600 mt-1 line-clamp-2">
                                                         {{ $notification->data['message'] ?? '' }}
@@ -100,21 +156,21 @@
                                         <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
                                             <i class="fas fa-bell-slash text-2xl text-gray-400"></i>
                                         </div>
-                                        <p class="text-sm font-medium text-gray-600 mb-1">Chưa có thông báo</p>
-                                        <p class="text-xs text-gray-500">Các thông báo mới sẽ xuất hiện ở đây</p>
+                                        <p class="text-sm font-medium text-gray-600 mb-1">{{ __('No notifications') }}</p>
+                                        <p class="text-xs text-gray-500">{{ __('New notifications will appear here') }}</p>
                                     </div>
                                 @endif
                             </div>
                             @if($latestNotifications->count() > 0)
                                 <div class="p-3 border-t border-gray-200 text-center bg-gray-50">
                                     <a href="{{ route('notifications.index') }}" class="text-sm text-purple-600 hover:text-purple-700 font-semibold inline-flex items-center">
-                                        Xem tất cả thông báo <i class="fas fa-arrow-right ml-1"></i>
+                                        {{ __('View all notifications') }} <i class="fas fa-arrow-right ml-1"></i>
                                     </a>
                                 </div>
                             @else
                                 <div class="p-3 border-t border-gray-200 text-center bg-gray-50">
                                     <a href="{{ route('notifications.index') }}" class="text-sm text-gray-600 hover:text-gray-700 font-medium">
-                                        Trang thông báo <i class="fas fa-arrow-right ml-1"></i>
+                                        {{ __('Notifications page') }} <i class="fas fa-arrow-right ml-1"></i>
                                     </a>
                                 </div>
                             @endif
@@ -132,40 +188,40 @@
 
                         <!-- Dropdown Menu -->
                         <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2">
-                            <a href="/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-user mr-2"></i>Profile
+                            <a href="{{ localized_route('profile') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user mr-2"></i>{{ __('Profile') }}
                             </a>
-                            <a href="/my-courses" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-book mr-2"></i>My Courses
+                            <a href="{{ localized_route('my-courses') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-book mr-2"></i>{{ __('My Courses') }}
                             </a>
-                            <a href="/dashboard" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-chart-line mr-2"></i>Dashboard
+                            <a href="{{ localized_route('dashboard') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-chart-line mr-2"></i>{{ __('Dashboard') }}
                             </a>
                             @if (auth()->user()->roles->contains('name', 'instructor') || auth()->user()->roles->contains('name', 'admin'))
-                                <a href="/instructor/courses" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                    <i class="fas fa-chalkboard mr-2"></i>Teach
+                                <a href="{{ localized_url('instructor/courses') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-chalkboard mr-2"></i>{{ __('Teach') }}
                                 </a>
                             @else
-                                <a href="/become-instructor" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                    <i class="fas fa-star mr-2"></i>Become Instructor
+                                <a href="{{ localized_url('become-instructor') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-star mr-2"></i>{{ __('Become Instructor') }}
                                 </a>
                             @endif
                             <hr class="my-2">
-                            <form action="/logout" method="POST" class="block">
+                            <form action="{{ localized_route('logout') }}" method="POST" class="block">
                                 @csrf
                                 <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
-                                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                    <i class="fas fa-sign-out-alt mr-2"></i>{{ __('Logout') }}
                                 </button>
                             </form>
                         </div>
                     </div>
                 @else
                     <!-- User Not Authenticated -->
-                    <a href="/login" class="text-gray-700 hover:text-purple-600 transition font-medium">
-                        Login
+                    <a href="{{ localized_route('login') }}" class="text-gray-700 hover:text-purple-600 transition font-medium">
+                        {{ __('Login') }}
                     </a>
-                    <a href="/register" class="btn-primary text-white px-6 py-2 rounded-lg font-medium">
-                        Register
+                    <a href="{{ localized_route('register') }}" class="btn-primary text-white px-6 py-2 rounded-lg font-medium">
+                        {{ __('Register') }}
                     </a>
                 @endif
             </div>
@@ -178,11 +234,11 @@
 
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden pb-4">
-            <a href="/" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Home</a>
-            <a href="/courses" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Courses</a>
-            <a href="/categories" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Categories</a>
-            <a href="/instructors" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Instructors</a>
-            <a href="/blog" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Blog</a>
+            <a href="{{ localized_route('home') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">{{ __('Home') }}</a>
+            <a href="{{ localized_route('courses.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">{{ __('Courses') }}</a>
+            <a href="{{ localized_route('categories') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">{{ __('Categories') }}</a>
+            <a href="{{ localized_route('instructors') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">{{ __('Instructors') }}</a>
+            <a href="{{ localized_route('blog') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">{{ __('Blog') }}</a>
         </div>
     </div>
 </nav>

@@ -105,7 +105,7 @@
                             <p class="font-semibold text-gray-900">{{ auth()->user()->two_factor_enabled ? 'Đang bật' : 'Đang tắt' }}</p>
                         </div>
                     </div>
-                    <a href="{{ route('profile') }}#security" class="text-sm text-purple-600 font-semibold hover:underline">
+                    <a href="{{ localized_route('profile') }}#security" class="text-sm text-purple-600 font-semibold hover:underline">
                         Quản lý 2FA
                     </a>
                 </div>

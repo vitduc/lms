@@ -49,7 +49,7 @@ class AuthController extends Controller
         // If user disabled 2FA, log them in immediately
         if (!$user->two_factor_enabled) {
             Auth::login($user, $request->boolean('remember'));
-            return redirect()->intended('/')->with('success', 'Đăng nhập thành công!');
+            return redirect()->intended(localized_route('home'))->with('success', 'Đăng nhập thành công!');
         }
 
         // Generate OTP and send to user's email
@@ -70,7 +70,7 @@ class AuthController extends Controller
         $request->session()->put('2fa:user_id', $user->id);
         $request->session()->put('2fa:remember', $request->boolean('remember'));
 
-        return redirect()->route('2fa.show')->with('success', 'Mã xác thực đã được gửi tới email của bạn.');
+        return redirect(localized_route('2fa.show'))->with('success', 'Mã xác thực đã được gửi tới email của bạn.');
     }
 
     /**
@@ -142,7 +142,7 @@ class AuthController extends Controller
         // store pending user id in session
         $request->session()->put('2fa:user_id', $user->id);
 
-        return redirect('/2fa')->with('success', 'Tài khoản đã được tạo. Vui lòng nhập mã OTP đã gửi tới email để hoàn tất đăng nhập.');
+        return redirect(localized_route('2fa.show'))->with('success', 'Tài khoản đã được tạo. Vui lòng nhập mã OTP đã gửi tới email để hoàn tất đăng nhập.');
     }
 
     /**
@@ -157,6 +157,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('success', 'Đã đăng xuất thành công!');
+        return redirect(localized_route('home'))->with('success', 'Đã đăng xuất thành công!');
     }
 }

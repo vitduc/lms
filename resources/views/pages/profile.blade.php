@@ -6,7 +6,7 @@
         ? json_decode($profile->social_links, true)
         : [];
     $canTeach = $user->roles->contains('name', 'instructor') || $user->roles->contains('name', 'admin');
-    $teachLink = route('teach');
+    $teachLink = localized_route('teach');
     $teachLabel = $canTeach ? 'Quản lý khóa giảng' : 'Đăng ký giảng dạy';
 @endphp
 <section class="pt-20 pb-16 bg-gray-50 min-h-screen">
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                        <a href="{{ route('profile') }}" class="border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-purple-200 hover:bg-purple-50 transition">
+                        <a href="{{ localized_route('profile') }}" class="border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-purple-200 hover:bg-purple-50 transition">
                             <span class="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xl">
                                 <i class="fas fa-user"></i>
                             </span>
@@ -84,7 +84,7 @@
                                 <p class="font-semibold text-gray-900">Thông tin cá nhân</p>
                             </div>
                         </a>
-                        <a href="{{ route('my-courses') }}" class="border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-indigo-200 hover:bg-indigo-50 transition">
+                        <a href="{{ localized_route('my-courses') }}" class="border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-indigo-200 hover:bg-indigo-50 transition">
                             <span class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl">
                                 <i class="fas fa-book"></i>
                             </span>
@@ -93,7 +93,7 @@
                                 <p class="font-semibold text-gray-900">Khóa học của tôi</p>
                             </div>
                         </a>
-                        <a href="{{ route('dashboard') }}" class="border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-emerald-200 hover:bg-emerald-50 transition">
+                        <a href="{{ localized_route('dashboard') }}" class="border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-emerald-200 hover:bg-emerald-50 transition">
                             <span class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
                                 <i class="fas fa-chart-line"></i>
                             </span>
@@ -111,7 +111,7 @@
                                 <p class="font-semibold text-gray-900">{{ $teachLabel }}</p>
                             </div>
                         </a>
-                        <a href="{{ route('settings') }}" class="border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-gray-300 hover:bg-gray-50 transition">
+                        <a href="{{ localized_route('settings') }}" class="border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-gray-300 hover:bg-gray-50 transition">
                             <span class="w-12 h-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center text-xl">
                                 <i class="fas fa-cog"></i>
                             </span>
@@ -120,7 +120,7 @@
                                 <p class="font-semibold text-gray-900">Cài đặt</p>
                             </div>
                         </a>
-                        <form action="{{ route('logout') }}" method="POST" class="border border-gray-100 rounded-2xl p-0 hover:border-red-200 hover:bg-red-50 transition">
+                        <form action="{{ localized_route('logout') }}" method="POST" class="border border-gray-100 rounded-2xl p-0 hover:border-red-200 hover:bg-red-50 transition">
                             @csrf
                             <button type="submit" class="w-full p-4 flex items-center gap-4 text-left">
                                 <span class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xl">
@@ -230,7 +230,7 @@
                                 <span class="text-sm font-semibold {{ $user->two_factor_enabled ? 'text-emerald-600' : 'text-gray-500' }}">
                                     {{ $user->two_factor_enabled ? 'Đang bật' : 'Đang tắt' }}
                                 </span>
-                                <form action="{{ route('profile.two-factor') }}" method="POST" class="flex items-center">
+                                <form action="{{ localized_route('profile.two-factor') }}" method="POST" class="flex items-center">
                                     @csrf
                                     @method('PATCH')
                                     <input type="hidden" name="two_factor_enabled" value="0">

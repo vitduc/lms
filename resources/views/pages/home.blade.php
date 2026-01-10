@@ -8,17 +8,17 @@
             <!-- Left Content -->
             <div>
                 <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-                    Học mọi lúc, <span class="gradient-text">mọi nơi</span>
+                    {{ __('Learn anytime, anywhere') }}
                 </h1>
                 <p class="text-lg text-gray-600 mb-8">
-                    Nền tảng học trực tuyến giúp bạn tiếp cận hàng ngàn khóa học chất lượng từ các giảng viên hàng đầu thế giới.
+                    {{ __('Online learning platform that gives you access to thousands of quality courses from world-class instructors.') }}
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="/courses" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold text-center">
-                        <i class="fas fa-book mr-2"></i>Khám phá khóa học
+                    <a href="{{ localized_route('courses.index') }}" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold text-center">
+                        <i class="fas fa-book mr-2"></i>{{ __('Explore courses') }}
                     </a>
-                    <a href="/register" class="border-2 border-purple-600 text-purple-600 hover:bg-purple-50 px-8 py-3 rounded-lg font-semibold text-center transition">
-                        <i class="fas fa-user-plus mr-2"></i>Đăng ký miễn phí
+                    <a href="{{ localized_route('register') }}" class="border-2 border-purple-600 text-purple-600 hover:bg-purple-50 px-8 py-3 rounded-lg font-semibold text-center transition">
+                        <i class="fas fa-user-plus mr-2"></i>{{ __('Sign up for free') }}
                     </a>
                 </div>
             </div>
@@ -50,19 +50,19 @@
                     <i class="fas fa-search absolute left-4 top-4 text-gray-400"></i>
                     <input
                         type="text"
-                        placeholder="Tìm kiếm khóa học..."
+                        placeholder="{{ __('Search for courses...') }}"
                         class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
                     >
                 </div>
                 <select class="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500">
-                    <option>Tất cả danh mục</option>
+                    <option>{{ __('All categories') }}</option>
                     <option>Lập trình</option>
                     <option>Marketing</option>
                     <option>Thiết kế</option>
                     <option>Kinh doanh</option>
                 </select>
                 <button type="submit" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold">
-                    Tìm kiếm
+                    {{ __('Search') }}
                 </button>
             </form>
         </div>
@@ -74,9 +74,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                Các danh mục <span class="gradient-text">nổi bật</span>
+                {{ __('Featured categories') }}
             </h2>
-            <p class="text-gray-600">Khám phá hàng ngàn khóa học trong các danh mục khác nhau</p>
+            <p class="text-gray-600">{{ __('Explore thousands of courses in different categories') }}</p>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -92,11 +92,11 @@
             @endphp
 
             @foreach ($categories as $category)
-                <a href="/categories/{{ strtolower($category['name']) }}" class="card-hover group">
+                <a href="{{ localized_url('categories/' . strtolower($category['name'])) }}" class="card-hover group">
                     <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg p-6 text-center hover:from-purple-100 hover:to-blue-100 transition">
                         <i class="fas {{ $category['icon'] }} text-3xl text-purple-600 mb-3 group-hover:scale-110 transition transform"></i>
                         <h3 class="font-semibold text-gray-800 mb-1">{{ $category['name'] }}</h3>
-                        <p class="text-sm text-gray-600">{{ $category['count'] }} khóa</p>
+                        <p class="text-sm text-gray-600">{{ $category['count'] }} {{ __('courses') }}</p>
                     </div>
                 </a>
             @endforeach
@@ -110,12 +110,12 @@
         <div class="flex justify-between items-center mb-12">
             <div>
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                    Khóa học <span class="gradient-text">nổi bật</span>
+                    {{ __('Featured courses') }}
                 </h2>
-                <p class="text-gray-600">Các khóa học được học viên đánh giá cao nhất</p>
+                <p class="text-gray-600">{{ __('Highest rated courses by students') }}</p>
             </div>
-            <a href="/courses" class="text-purple-600 font-semibold hover:text-purple-700">
-                Xem tất cả <i class="fas fa-arrow-right ml-2"></i>
+            <a href="{{ localized_route('courses.index') }}" class="text-purple-600 font-semibold hover:text-purple-700">
+                {{ __('View all') }} <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
 
@@ -196,7 +196,7 @@
                                 <!-- Price -->
                                 <div class="flex justify-between items-center">
                                     <span class="text-lg font-bold text-purple-600">₫{{ $course['price'] }}</span>
-                                    <a href="/course/{{ $course['id'] }}" class="text-purple-600 hover:text-purple-700">
+                                    <a href="{{ localized_url('course/' . $course['id']) }}" class="text-purple-600 hover:text-purple-700">
                                         <i class="fas fa-arrow-right"></i>
                                     </a>
                                 </div>
@@ -213,8 +213,8 @@
         </div>
 
         <div class="text-center">
-            <a href="/courses" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold inline-block">
-                Xem tất cả khóa học
+            <a href="{{ localized_route('courses.index') }}" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold inline-block">
+                {{ __('View all courses') }}
             </a>
         </div>
     </div>
@@ -226,19 +226,19 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
             <div>
                 <div class="text-4xl font-bold mb-2">10,000+</div>
-                <p class="text-purple-100"><i class="fas fa-graduation-cap mr-2"></i>Học viên</p>
+                <p class="text-purple-100"><i class="fas fa-graduation-cap mr-2"></i>{{ __('Students') }}</p>
             </div>
             <div>
                 <div class="text-4xl font-bold mb-2">1,200+</div>
-                <p class="text-purple-100"><i class="fas fa-book mr-2"></i>Khóa học</p>
+                <p class="text-purple-100"><i class="fas fa-book mr-2"></i>{{ __('Courses') }}</p>
             </div>
             <div>
                 <div class="text-4xl font-bold mb-2">150+</div>
-                <p class="text-purple-100"><i class="fas fa-chalkboard-user mr-2"></i>Giảng viên</p>
+                <p class="text-purple-100"><i class="fas fa-chalkboard-user mr-2"></i>{{ __('Instructors') }}</p>
             </div>
             <div>
                 <div class="text-4xl font-bold mb-2">98%</div>
-                <p class="text-purple-100"><i class="fas fa-star mr-2"></i>Hài lòng</p>
+                <p class="text-purple-100"><i class="fas fa-star mr-2"></i>{{ __('Satisfied') }}</p>
             </div>
         </div>
     </div>
@@ -249,9 +249,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                Giảng viên <span class="gradient-text">nổi bật</span>
+                {{ __('Featured instructors') }}
             </h2>
-            <p class="text-gray-600">Học từ những chuyên gia hàng đầu ngành</p>
+            <p class="text-gray-600">{{ __('Learn from industry-leading experts') }}</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -274,8 +274,8 @@
                         <span><i class="fas fa-users mr-1"></i>{{ $instructor['students'] }}</span>
                         <span><i class="fas fa-book mr-1"></i>{{ $instructor['courses'] }}</span>
                     </div>
-                    <a href="/instructor/{{ strtolower(str_replace(' ', '-', $instructor['name'])) }}" class="btn-primary text-white px-4 py-2 rounded-lg text-sm font-semibold inline-block">
-                        Xem Profile
+                    <a href="{{ localized_url('instructor/' . strtolower(str_replace(' ', '-', $instructor['name']))) }}" class="btn-primary text-white px-4 py-2 rounded-lg text-sm font-semibold inline-block">
+                        {{ __('View Profile') }}
                     </a>
                 </div>
             @endforeach
@@ -288,20 +288,20 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                Tại sao chọn <span class="gradient-text">LearnHub</span>
+                {{ __('Why choose LearnHub') }}
             </h2>
-            <p class="text-gray-600">Những tính năng giúp bạn học tập hiệu quả</p>
+            <p class="text-gray-600">{{ __('Features that help you learn effectively') }}</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @php
                 $features = [
-                    ['icon' => 'fa-mobile', 'title' => 'Học mọi lúc mọi nơi', 'desc' => 'Tiếp cận khóa học trên mọi thiết bị, mọi thời điểm'],
-                    ['icon' => 'fa-video', 'title' => 'Video chất lượng cao', 'desc' => 'Nội dung video 4K với giảng dạy rõ ràng'],
-                    ['icon' => 'fa-check-circle', 'title' => 'Bài tập & kiểm tra', 'desc' => 'Luyện tập với hàng trăm bài tập thực hành'],
-                    ['icon' => 'fa-certificate', 'title' => 'Chứng chỉ hoàn thành', 'desc' => 'Nhận chứng chỉ được công nhân rộng rãi'],
-                    ['icon' => 'fa-credit-card', 'title' => 'Thanh toán đơn giản', 'desc' => 'Hỗ trợ nhiều phương thức thanh toán an toàn'],
-                    ['icon' => 'fa-headset', 'title' => 'Support 24/7', 'desc' => 'Đội hỗ trợ luôn sẵn sàng giúp bạn'],
+                    ['icon' => 'fa-mobile', 'title' => __('Learn anytime, anywhere'), 'desc' => __('Learn anytime, anywhere')],
+                    ['icon' => 'fa-video', 'title' => __('High quality videos'), 'desc' => __('4K content with clear teaching')],
+                    ['icon' => 'fa-check-circle', 'title' => __('Exercises & Tests'), 'desc' => __('Practice with hundreds of hands-on exercises')],
+                    ['icon' => 'fa-certificate', 'title' => __('Completion certificate'), 'desc' => __('Widely recognized certificate')],
+                    ['icon' => 'fa-credit-card', 'title' => __('Simple payment'), 'desc' => __('Support for multiple secure payment methods')],
+                    ['icon' => 'fa-headset', 'title' => __('Support 24/7'), 'desc' => __('Support team always ready to help you')],
                 ];
             @endphp
 
@@ -323,9 +323,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                Đánh giá từ <span class="gradient-text">học viên</span>
+                {{ __('Testimonials from students') }}
             </h2>
-            <p class="text-gray-600">Những nhận xét từ những học viên thực tế</p>
+            <p class="text-gray-600">{{ __('Reviews from real students') }}</p>
         </div>
 
         <div class="swiper">
@@ -373,21 +373,21 @@
 <section class="py-16 bg-gradient-to-r from-purple-600 to-blue-600">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-            Nhận thông báo về khóa học mới
+            {{ __('Get notified about new courses') }}
         </h2>
         <p class="text-purple-100 mb-8">
-            Đăng ký để nhận những khóa học mới nhất và các ưu đãi độc quyền hàng tuần
+            {{ __('Subscribe to receive the latest courses and exclusive weekly offers') }}
         </p>
 
         <form class="flex flex-col sm:flex-row gap-3">
             <input
                 type="email"
-                placeholder="Nhập email của bạn..."
+                placeholder="{{ __('Enter your email...') }}"
                 class="flex-1 px-4 py-3 rounded-lg focus:outline-none"
                 required
             >
             <button type="submit" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
-                Đăng ký
+                {{ __('Subscribe') }}
             </button>
         </form>
     </div>

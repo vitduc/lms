@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,7 +82,7 @@
             dropdown.classList.toggle('hidden');
         });
 
-        // Close dropdown when clicking outside
+        // Close dropdowns when clicking outside
         document.addEventListener('click', function(e) {
             const dropdown = document.getElementById('user-dropdown');
             const btn = document.getElementById('user-dropdown-btn');
@@ -92,10 +92,15 @@
 
             // Close notifications dropdown when clicking outside
             const notificationsDropdown = document.getElementById('notifications-dropdown');
-            const notificationsBtn = document.getElementById('notifications-btn');
             const notificationsContainer = document.getElementById('notifications-container');
             if (notificationsDropdown && notificationsContainer && !notificationsContainer.contains(e.target)) {
                 notificationsDropdown.classList.add('hidden');
+            }
+
+            const categoriesDropdown = document.getElementById('categories-dropdown');
+            const categoriesContainer = document.getElementById('categories-container');
+            if (categoriesDropdown && categoriesContainer && !categoriesContainer.contains(e.target)) {
+                categoriesDropdown.classList.add('hidden');
             }
         });
 
@@ -105,6 +110,31 @@
             e.stopPropagation();
             const dropdown = document.getElementById('notifications-dropdown');
             dropdown.classList.toggle('hidden');
+        });
+
+        // Categories Dropdown Toggle
+        document.getElementById('categories-btn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const dropdown = document.getElementById('categories-dropdown');
+            dropdown.classList.toggle('hidden');
+        });
+
+        // Language Dropdown Toggle
+        document.getElementById('language-btn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const dropdown = document.getElementById('language-dropdown');
+            dropdown.classList.toggle('hidden');
+        });
+
+        // Close language dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const languageDropdown = document.getElementById('language-dropdown');
+            const languageBtn = document.getElementById('language-btn');
+            if (languageDropdown && languageBtn && !languageDropdown.contains(e.target) && !languageBtn.contains(e.target)) {
+                languageDropdown.classList.add('hidden');
+            }
         });
     </script>
     @stack('scripts')

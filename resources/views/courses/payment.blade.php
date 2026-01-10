@@ -4,7 +4,7 @@
 <section class="pt-20 pb-16 bg-gray-50 min-h-screen">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-6">
-            <a href="{{ route('courses.show', $course->slug) }}" class="text-purple-600 hover:text-purple-700 font-semibold">
+            <a href="{{ localized_route('courses.show', $course->slug) }}" class="text-purple-600 hover:text-purple-700 font-semibold">
                 <i class="fas fa-arrow-left mr-2"></i>Quay lại khóa học
             </a>
         </div>
@@ -15,7 +15,7 @@
                 <div class="bg-white rounded-2xl shadow-md p-6">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">Thông tin thanh toán</h2>
 
-                    <form action="{{ route('courses.payment.process', $course->id) }}" method="POST" id="payment-form">
+                    <form action="{{ localized_route('courses.payment.process', $course->id) }}" method="POST" id="payment-form">
                         @csrf
 
                         <!-- Course Summary -->

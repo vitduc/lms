@@ -22,7 +22,7 @@ class TwoFactorController extends Controller
     public function show(Request $request)
     {
         if (!session('2fa:user_id')) {
-            return redirect()->route('login');
+            return redirect(localized_route('login'));
         }
 
         return view('auth.verify-2fa');
@@ -42,7 +42,7 @@ class TwoFactorController extends Controller
 
         $userId = session('2fa:user_id');
         if (!$userId) {
-            return redirect()->route('login')->withErrors(['otp' => 'Yêu cầu xác thực không hợp lệ.']);
+            return redirect(localized_route('login'))->withErrors(['otp' => 'Yêu cầu xác thực không hợp lệ.']);
         }
 
         $token = TwoFactorToken::where('user_id', $userId)
@@ -66,7 +66,7 @@ class TwoFactorController extends Controller
         // Log the user in
         $user = User::find($userId);
         if (!$user) {
-            return redirect()->route('login')->withErrors(['otp' => 'Người dùng không tồn tại.']);
+            return redirect(localized_route('login'))->withErrors(['otp' => 'Người dùng không tồn tại.']);
         }
 
         $remember = session('2fa:remember', false);
@@ -76,7 +76,7 @@ class TwoFactorController extends Controller
         $request->session()->forget('2fa:user_id');
         $request->session()->forget('2fa:remember');
 
-        return redirect()->intended('/')->with('success', 'Xác thực thành công!');
+        return redirect()->intended(localized_route('home'))->with('success', 'Xác thực thành công!');
     }
 
     /**
@@ -89,12 +89,12 @@ class TwoFactorController extends Controller
     {
         $userId = session('2fa:user_id');
         if (!$userId) {
-            return redirect()->route('login');
+            return redirect(localized_route('login'));
         }
 
         $user = User::find($userId);
         if (!$user) {
-            return redirect()->route('login');
+            return redirect(localized_route('login'));
         }
 
         // Create new OTP

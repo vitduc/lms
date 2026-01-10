@@ -8,6 +8,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Services\NotificationService;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -22,33 +24,29 @@ class CourseController extends Controller
     }
 
     /**
-     * Display listing of courses
+     * Retrieve courses
+     *
+     * @param Request $request
+     * @param string|null $slug
+     * @return Factory|View
      */
-    public function index(Request $request)
+    public function index(Request $request, string $slug = null)
     {
-        $query = Course::with(['instructor', 'category', 'level'])
+        $query = Course::with(['instructor', 'categories', 'level'])
             ->where('status', 'published');
 
-        // Filter by category
-        if ($request->has('category')) {
-            $query->whereHas('category', function($q) use ($request) {
-                $q->where('slug', $request->category);
+        if ($slug) {
+            $query->whereHas('categories', function($q) use ($slug) {
+                $q->where('slug', $slug);
             });
         }
 
-        // Filter by level
-        if ($request->has('level')) {
+        if ($request->filled('level')) {
             $query->whereHas('level', function($q) use ($request) {
                 $q->where('slug', $request->level);
             });
         }
 
-        // Search
-        if ($request->has('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
-        }
-
-        // Filter free/paid
         if ($request->has('price')) {
             if ($request->price === 'free') {
                 $query->where('price', 0);
@@ -88,7 +86,7 @@ class CourseController extends Controller
         $course = Course::findOrFail($id);
 
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để đăng ký khóa học.');
+            return redirect(localized_route('login'))->with('error', 'Vui lòng đăng nhập để đăng ký khóa học.');
         }
 
         $user = Auth::user();
@@ -115,12 +113,12 @@ class CourseController extends Controller
                 $course->id
             );
 
-            return redirect()->route('my-courses')
+            return redirect(localized_route('my-courses'))
                 ->with('success', 'Đăng ký khóa học thành công!');
         }
 
         // If course is paid, redirect to payment
-        return redirect()->route('courses.payment', $course->id);
+        return redirect(localized_route('courses.payment', $course->id));
     }
 
     /**
@@ -131,19 +129,19 @@ class CourseController extends Controller
         $course = Course::findOrFail($id);
 
         if ($course->isFree()) {
-            return redirect()->route('courses.show', $course->slug)
+            return redirect(localized_route('courses.show', $course->slug))
                 ->with('info', 'Khóa học này miễn phí.');
         }
 
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán.');
+            return redirect(localized_route('login'))->with('error', 'Vui lòng đăng nhập để thanh toán.');
         }
 
         $user = Auth::user();
 
         // Check if already enrolled
         if ($course->isEnrolledBy($user->id)) {
-            return redirect()->route('courses.show', $course->slug)
+            return redirect(localized_route('courses.show', $course->slug))
                 ->with('info', 'Bạn đã đăng ký khóa học này rồi.');
         }
 
@@ -230,7 +228,7 @@ class CourseController extends Controller
             $course->id
         );
 
-        return redirect()->route('my-courses')
+        return redirect(localized_route('my-courses'))
             ->with('success', 'Thanh toán thành công! Bạn đã được ghi danh vào khóa học.');
     }
 }
